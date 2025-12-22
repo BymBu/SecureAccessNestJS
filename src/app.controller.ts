@@ -1,12 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getStatus() {
+    return {
+      status: 'OAuth Server is running',
+      db: 'PostgreSQL + Sequelize',
+      next: 'Implement /auth/signup and /oauth/* endpoints',
+    };
   }
 }
