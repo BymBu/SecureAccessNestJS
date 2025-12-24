@@ -1,9 +1,10 @@
 import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { OAuthClient } from './models/OAuth-client.model';
-import { OAuthToken } from './models/OAuth-token.model';
-import { User } from '../users/models/user.model';
+import { OAuthClient } from '../models/OAuth-client.model';
+import { OAuthToken } from '../models/OAuth-token.model';
+import { User } from '../models/user.model';
 import * as crypto from 'crypto';
+import { TOKEN_EXPIRY } from 'src/config/constants';
 
 @Controller('oauth')
 export class OAuthController {
@@ -53,7 +54,7 @@ export class OAuthController {
       accessToken,
       userId,
       clientId: client.id,
-      expiresAt: new Date(Date.now() + 3600 * 1000),
+      expiresAt: new Date(Date.now() + TOKEN_EXPIRY.ACCESS),
     });
 
     return {

@@ -5,7 +5,7 @@ import {
   DataType,
   ForeignKey,
 } from 'sequelize-typescript';
-import { User } from '../../users/models/user.model';
+import { User } from '../models/user.model';
 import { OAuthClient } from './OAuth-client.model';
 
 @Table({ tableName: 'oauth_tokens' })

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
-import { User } from './users/models/user.model';
-import { OAuthClient } from './oauth/models/OAuth-client.model';
-import { OAuthToken } from './oauth/models/OAuth-token.model';
+import { User } from './models/user.model';
+import { OAuthClient } from './models/OAuth-client.model';
+import { OAuthToken } from './models/OAuth-token.model';
 import { AppController } from './app.controller';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';

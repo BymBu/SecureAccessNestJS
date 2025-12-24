@@ -1,6 +1,7 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from './models/user.model';
+import { User } from '../models/user.model';
+
 
 @Injectable()
 export class UsersService {
@@ -19,14 +20,14 @@ export class UsersService {
       password,
     };
 
-    if (phone !== undefined) {
+    if (!phone) {
       userData.phone = phone;
     }
 
     const user = await this.userModel.create(userData);
 
     const userJson = user.toJSON();
-    const { password: _, ...result } = userJson;
+    const result = { ...userJson };
     return result;
   }
 
