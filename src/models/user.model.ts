@@ -54,6 +54,14 @@ export class User extends Model<User> {
   })
   declare lastName: string | null;
 
+  serialize() {
+    const json = this.toJSON();
+
+    const { password, ...publicData } = json;
+
+    return publicData;
+  }
+
   @BeforeCreate
   @BeforeUpdate
   static async hashPassword(user: User) {
