@@ -1,6 +1,16 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UsersService } from '@users/users.service';
 import { UnauthorizedException } from '@nestjs/common';
+import { SignupDto } from '@dto/signup.dto';
+import { LoginDto } from '@dto/login.dto';
 
 @Controller('auth')
 export class UsersController {
@@ -8,12 +18,13 @@ export class UsersController {
 
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
-  async signup(
-    @Body('email') email: string,
-    @Body('password') password: string,
-    @Body('phone') phone?: string,
-  ) {
-    const user = await this.usersService.createUser(email, password, phone);
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  async signup(@Body() dto: SignupDto) {
+    const user = await this.usersService.createUser(
+      dto.email,
+      dto.password,
+      dto.phone,
+    );
     return {
       message: 'Пользователь успешно зарегистрирован!',
       user,
@@ -22,13 +33,11 @@ export class UsersController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ) {
-    const user = await this.usersService.findByEmail(email);
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  async login(@Body() dto: LoginDto) {
+    const user = await this.usersService.findByEmail(dto.email);
 
-    if (!user || !(await user.validatePassword(password))) {
+    if (!user || !(await user.validatePassword(dto.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
