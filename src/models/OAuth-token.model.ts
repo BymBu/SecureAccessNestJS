@@ -5,8 +5,8 @@ import {
   DataType,
   ForeignKey,
 } from 'sequelize-typescript';
-import { User } from '../models/user.model';
-import { OAuthClient } from './OAuth-client.model';
+import { User } from '@models/user.model';
+import { OAuthClient } from '@models/OAuth-client.model';
 
 @Table({ tableName: 'oauth_tokens' })
 export class OAuthToken extends Model {
