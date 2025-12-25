@@ -25,18 +25,8 @@ export class UsersService {
     }
 
     const user = await this.userModel.create(userData);
-    const userJson = user.toJSON();
 
-
-    return {
-      id: userJson.id,
-      email: userJson.email,
-      phone: userJson.phone || null,
-      createdAt: userJson.createdAt,
-      updatedAt: userJson.updatedAt,
-      firstName: userJson.firstName || null,
-      lastName: userJson.lastName || null,
-    };
+    return user.serialize();
   }
 
   async findByEmail(email: string) {
