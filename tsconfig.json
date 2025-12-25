@@ -14,6 +14,12 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
+    "paths": {
+      "@models/*": ["src/models/*"],
+      "@users/*": ["src/users/*"],
+      "@oauth/*": ["src/oauth/*"],
+      "@config/*": ["src/config/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
