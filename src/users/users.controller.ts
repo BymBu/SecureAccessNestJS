@@ -1,5 +1,5 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from '@users/users.service';
 import { UnauthorizedException } from '@nestjs/common';
 
 @Controller('auth')
