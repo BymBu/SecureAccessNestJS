@@ -18,6 +18,7 @@
       "@models/*": ["src/models/*"],
       "@users/*": ["src/users/*"],
       "@oauth/*": ["src/oauth/*"],
+      "@dto/*": ["src/dto/*"],
       "@config/*": ["src/config/*"]
     },
     "incremental": true,
