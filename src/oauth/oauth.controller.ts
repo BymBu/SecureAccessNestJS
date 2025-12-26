@@ -60,7 +60,7 @@ export class OAuthController {
     return {
       access_token: accessToken,
       token_type: 'Bearer',
-      expires_in: TOKEN_EXPIRY.ACCESS / 1000,
+      expires_in: TOKEN_EXPIRY.ACCESS / 1000, // перевод в секунды
     };
   }
 }
