@@ -5,6 +5,7 @@ import { OAuthToken } from '@models/OAuth-token.model';
 import { User } from '@models/user.model';
 import * as crypto from 'crypto';
 import { TOKEN_EXPIRY } from '@config/constants';
+import { UsersService } from '@users/users.service';
 
 @Controller('oauth')
 export class OAuthController {
@@ -15,6 +16,7 @@ export class OAuthController {
     private tokenModel: typeof OAuthToken,
     @InjectModel(User)
     private userModel: typeof User,
+    private usersService: UsersService,
   ) {}
 
   @Post('token')
@@ -28,31 +30,29 @@ export class OAuthController {
     const client = await this.clientModel.findOne({
       where: { clientId, clientSecret },
     });
-
     if (!client) {
-      throw new UnauthorizedException('Invalid client credentials');
+      throw new UnauthorizedException('Неверные учетные данные клиента');
     }
 
-    let userId: number;
-    if (username && password) {
-      const user = await this.userModel.findOne({ where: { email: username } });
-      if (!user || !(await user.validatePassword(password))) {
-        throw new UnauthorizedException('Invalid credentials');
-      }
-      userId = user.id;
-    } else {
-      const firstUser = await this.userModel.findOne();
-      if (!firstUser) {
-        throw new UnauthorizedException('No users found in database');
-      }
-      userId = firstUser.id;
+    if (grantType !== 'password') {
+      throw new UnauthorizedException('Неподдерживаемый тип гранта');
+    }
+
+    if (!username || !password) {
+      throw new UnauthorizedException(
+        'Для предоставления доступа требуются имя пользователя и пароль',
+      );
+    }
+
+    const user = await this.userModel.findOne({ where: { email: username } });
+    if (!user || !(await this.usersService.validatePassword(user, password))) {
+      throw new UnauthorizedException('Неверные учетные данные');
     }
 
     const accessToken = crypto.randomBytes(32).toString('hex');
-
     await this.tokenModel.create({
       accessToken,
-      userId,
+      userId: user.id,
       clientId: client.id,
       expiresAt: new Date(Date.now() + TOKEN_EXPIRY.ACCESS),
     });
@@ -60,7 +60,7 @@ export class OAuthController {
     return {
       access_token: accessToken,
       token_type: 'Bearer',
-      expires_in: 3600,
+      expires_in: TOKEN_EXPIRY.ACCESS / 1000,
     };
   }
 }

@@ -28,14 +28,18 @@ export class UsersController {
   ) {
     const user = await this.usersService.findByEmail(email);
 
-    if (!user || !(await user.validatePassword(password))) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (!user) {
+      throw new UnauthorizedException('Неверные учетные данные');
+    }
+
+    if (!(await this.usersService.validatePassword(user, password))) {
+      throw new UnauthorizedException('Неверные учетные данные');
     }
 
     return {
-      message: 'Login successful',
+      message: 'Вход в систему прошел успешно',
       userId: user.id,
-      nextStep: 'Use OAuth flow to get access token',
+      nextStep: 'Используйте поток OAuth для получения токена доступа',
     };
   }
 }

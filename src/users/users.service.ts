@@ -1,6 +1,7 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '@models/user.model';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +13,9 @@ export class UsersService {
   async createUser(email: string, password: string, phone?: string) {
     const existingUser = await this.userModel.findOne({ where: { email } });
     if (existingUser) {
-      throw new ConflictException('User with this email already exists');
+      throw new ConflictException(
+        'Пользователь с таким адресом электронной почты уже существует',
+      );
     }
 
     const userData: any = {
@@ -31,5 +34,9 @@ export class UsersService {
 
   async findByEmail(email: string) {
     return this.userModel.findOne({ where: { email } });
+  }
+
+  async validatePassword(user: User, password: string): Promise<boolean> {
+    return bcrypt.compare(password, user.password);
   }
 }
