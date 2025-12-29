@@ -120,7 +120,7 @@ export class OAuthController {
         access_token: accessToken,
         refresh_token: refreshToken,
         token_type: 'Bearer',
-        expires_in: TOKEN_EXPIRY.ACCESS / 1000,
+        expires_in: TOKEN_EXPIRY.ACCESS / 1000, // в секунды
       };
     }
 
