@@ -15,6 +15,12 @@ export class OAuthToken extends Model {
   declare accessToken: string;
 
   @Column({ type: DataType.STRING })
+  declare refreshToken: string;
+
+  @Column({ type: DataType.DATE })
+  declare refreshExpiresAt: Date;
+
+  @Column({ type: DataType.STRING })
   declare authorizationCode: string;
 
   @Column({ type: DataType.DATE })
