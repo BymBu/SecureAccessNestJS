@@ -26,6 +26,9 @@ export class OAuthToken extends Model {
   @Column({ type: DataType.DATE })
   declare expiresAt: Date;
 
+  @Column({ type: DataType.STRING, allowNull: true })
+  declare scopes: string | null;
+
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })
   declare userId: number;

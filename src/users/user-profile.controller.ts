@@ -7,12 +7,14 @@ import {
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '@models/user.model';
 import { OAuthToken } from '@models/OAuth-token.model';
+import { UsersService } from './users.service';
 
 @Controller('api/user')
 export class UserProfileController {
   constructor(
     @InjectModel(OAuthToken)
     private tokenModel: typeof OAuthToken,
+    private usersService: UsersService,
   ) {}
 
   @Get('me')
@@ -25,12 +27,7 @@ export class UserProfileController {
 
     const tokenRecord = await this.tokenModel.findOne({
       where: { accessToken },
-      include: [
-        {
-          model: User,
-          as: 'user',
-        },
-      ],
+      include: [{ model: User, as: 'user' }],
     });
 
     if (!tokenRecord || tokenRecord.expiresAt < new Date()) {
@@ -41,6 +38,10 @@ export class UserProfileController {
       throw new UnauthorizedException('Пользователь не найден');
     }
 
-    return tokenRecord.user.serialize();
+    const requestedScopes = tokenRecord.scopes?.split(' ') || ['openid'];
+    return this.usersService.filterUserByScopes(
+      tokenRecord.user,
+      requestedScopes,
+    );
   }
 }

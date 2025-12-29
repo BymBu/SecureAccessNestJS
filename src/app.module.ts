@@ -9,6 +9,7 @@ import { UsersController } from '@users/users.controller';
 import { UsersService } from '@users/users.service';
 import { OAuthController } from '@oauth/oauth.controller';
 import { UserProfileController } from '@users/user-profile.controller';
+import { OAuthAuthorizationCode } from '@models/OAuth-auth-code.model';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { UserProfileController } from '@users/user-profile.controller';
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'oauth_db',
-      models: [User, OAuthClient, OAuthToken],
+      models: [User, OAuthClient, OAuthToken, OAuthAuthorizationCode],
       autoLoadModels: true,
       synchronize: process.env.NODE_ENV !== 'production',
       logging: false,

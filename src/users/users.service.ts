@@ -32,6 +32,31 @@ export class UsersService {
     return user.serialize();
   }
 
+  // SCOPES
+  filterUserByScopes(user: User, scopes: string[]): Record<string, any> {
+    const requestedScopes = scopes || ['openid'];
+    const response: Record<string, any> = {};
+
+    if (
+      requestedScopes.includes('profile') ||
+      requestedScopes.includes('openid')
+    ) {
+      response.id = user.id;
+      response.firstName = user.firstName;
+      response.lastName = user.lastName;
+    }
+
+    if (requestedScopes.includes('email')) {
+      response.email = user.email;
+    }
+
+    if (requestedScopes.includes('phone')) {
+      response.phone = user.phone;
+    }
+
+    return response;
+  }
+
   async findByEmail(email: string) {
     return this.userModel.findOne({ where: { email } });
   }
