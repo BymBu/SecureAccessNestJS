@@ -8,6 +8,8 @@ import { AppController } from './app.controller';
 import { UsersController } from '@users/users.controller';
 import { UsersService } from '@users/users.service';
 import { OAuthController } from '@oauth/oauth.controller';
+import { AuthHtmlController } from './auth/auth-html.controller';
+import { UserProfileController } from '@users/user-profile.controller';
 
 @Module({
   imports: [
@@ -26,7 +28,13 @@ import { OAuthController } from '@oauth/oauth.controller';
     }),
     SequelizeModule.forFeature([User, OAuthClient, OAuthToken]),
   ],
-  controllers: [AppController, UsersController, OAuthController],
+  controllers: [
+    AppController,
+    UsersController,
+    OAuthController,
+    AuthHtmlController,
+    UserProfileController,
+  ],
   providers: [UsersService],
 })
 export class AppModule {}
