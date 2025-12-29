@@ -49,7 +49,10 @@ export class OAuthController {
       throw new UnauthorizedException('Неверные учетные данные');
     }
 
-    const accessToken = crypto.randomBytes(32).toString('hex');
+    const accessToken = crypto
+      .randomBytes(TOKEN_EXPIRY.RANDOMBYTES)
+      .toString('hex');
+
     await this.tokenModel.create({
       accessToken,
       userId: user.id,
