@@ -4,6 +4,7 @@ import {
   Model,
   DataType,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { User } from '@models/user.model';
 import { OAuthClient } from '@models/OAuth-client.model';
@@ -11,19 +12,22 @@ import { OAuthClient } from '@models/OAuth-client.model';
 @Table({ tableName: 'oauth_tokens' })
 export class OAuthToken extends Model {
   @Column({ type: DataType.STRING })
-  accessToken: string;
+  declare accessToken: string;
 
   @Column({ type: DataType.STRING })
-  authorizationCode: string;
+  declare authorizationCode: string;
 
   @Column({ type: DataType.DATE })
-  expiresAt: Date;
+  declare expiresAt: Date;
 
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })
-  userId: number;
+  declare userId: number;
+
+  @BelongsTo(() => User)
+  declare user: User;
 
   @ForeignKey(() => OAuthClient)
   @Column({ type: DataType.INTEGER })
-  clientId: number;
+  declare clientId: number;
 }
