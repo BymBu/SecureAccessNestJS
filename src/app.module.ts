@@ -24,7 +24,7 @@ import { OAuthService } from '@oauth/oauth.service';
       database: process.env.DB_NAME || 'oauth_db',
       models: [User, OAuthClient, OAuthToken, OAuthAuthorizationCode],
       autoLoadModels: true,
-      synchronize: process.env.NODE_ENV !== 'production',
+      synchronize: true,
       logging: false,
     }),
     SequelizeModule.forFeature([User, OAuthClient, OAuthToken]),

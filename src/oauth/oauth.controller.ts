@@ -21,6 +21,9 @@ export class OAuthController {
     @Body('password') password?: string,
     @Body('refresh_token') refreshToken?: string,
     @Body('scope') scope?: string,
+    @Body('code') code?: string,
+    @Body('redirect_uri') redirectUri?: string,
+    @Body('code_verifier') codeVerifier?: string,
   ) {
     if (grantType === OAuthGrantType.PASSWORD) {
       if (!username || !password) {
@@ -43,6 +46,19 @@ export class OAuthController {
         refreshToken,
         clientId,
         clientSecret,
+      });
+    }
+
+    if (grantType === OAuthGrantType.AUTHORIZATION_CODE) {
+      if (!code || !redirectUri) {
+        throw new BadRequestException('требуется ввести код и redirect uri');
+      }
+      return await this.oauthService.handleAuthorizationCodeGrant({
+        code,
+        redirectUri,
+        clientId,
+        clientSecret,
+        codeVerifier,
       });
     }
 
