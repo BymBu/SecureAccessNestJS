@@ -10,6 +10,7 @@ import { UsersService } from '@users/users.service';
 import { OAuthController } from '@oauth/oauth.controller';
 import { UserProfileController } from '@users/user-profile.controller';
 import { OAuthAuthorizationCode } from '@models/OAuth-auth-code.model';
+import { OAuthService } from '@oauth/oauth.service';
 
 @Module({
   imports: [
@@ -34,6 +35,6 @@ import { OAuthAuthorizationCode } from '@models/OAuth-auth-code.model';
     OAuthController,
     UserProfileController,
   ],
-  providers: [UsersService],
+  providers: [UsersService, OAuthService],
 })
 export class AppModule {}
